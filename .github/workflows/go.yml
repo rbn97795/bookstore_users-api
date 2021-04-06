@@ -19,21 +19,12 @@ jobs:
     - name: Test
       run: go test -v ./...
     
-    - name: Docker Bulid
-      uses: benjlevesque/actions-docker-gcr/build@v1.1
+    - name: Build and push to gcr
+      uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
       with:
-        image: ${{ secrets.GOOGLE_PROJECT_ID }}/bookstore_users-api
-        registry: asia.gcr.io
-      env: 
-          MYSQL_USERS_USERNAME: ${{ secrets.MYSQL_USERS_USERNAME }}
-          MYSQL_USERS_PASSWORD: ${{ secrets.MYSQL_USERS_PASSWORD }}
-          MYSQL_USERS_HOST: ${{ secrets.MYSQL_USERS_HOST }}
-          MYSQL_USERS_SCHEMA: ${{ secrets.MYSQL_USERS_SCHEMA }}
-
-    - name: Docker Push
-      uses: benjlevesque/actions-docker-gcr/push@v1.1
-      with:
-          image: ${{ secrets.GOOGLE_PROJECT_ID }}/bookstore_users-api
+          gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
           registry: asia.gcr.io
-          gcloud_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-      
+          project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
+          image_name: bookstore_users-api
+          build_args: MYSQL_USERS_USERNAME=${{ secrets.MYSQL_USERS_USERNAME }},MYSQL_USERS_PASSWORD=${{ secrets.MYSQL_USERS_PASSWORD }},MYSQL_USERS_HOST=${{ secrets.MYSQL_USERS_HOST }}, MYSQL_USERS_SCHEMA=${{ secrets.MYSQL_USERS_SCHEMA }}
+  
