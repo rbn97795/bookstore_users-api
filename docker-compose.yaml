@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql
+    ports:
+      - "3307:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: users_db
+    volumes: 
+      - ./datasources/mysql/database:/var/lib/mysql
+      # - ./app/config/database:mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+  bookstore_users-api:
+    image: bookstore_users-api
+    ports:
+      - "8080:8080"
+    depends_on: 
+        - mysql
+    restart: always
+
+# version: '3'
+# services:
+#   db:
+#     image: mysql:8.0
+#     ports:
+#       - "3307:3306"
+#     environment:
+#       MYSQL_ROOT_PASSWORD: 1234
+#       MYSQL_DATABASE: users_db
+#     volumes: 
+#       - ./database/maindata:/var/lib/mysql
+#       # - ./app/config/database/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+#   app:
+#     image: bookstore_users-api
+#     ports:
+#       - "8080:8080"
+#     depends_on:
+#       - db

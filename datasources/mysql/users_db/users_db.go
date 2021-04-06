@@ -17,16 +17,17 @@ const (
 )
 
 var (
-	Client    *sql.DB
-	TestValue int = 1
-	username      = os.Getenv(mysql_users_username)
-	password      = os.Getenv(mysql_users_password)
-	host          = os.Getenv(mysql_users_host)
-	schema        = os.Getenv(mysql_users_schema)
+	Client   *sql.DB
+	username = os.Getenv(mysql_users_username)
+	password = os.Getenv(mysql_users_password)
+	host     = os.Getenv(mysql_users_host)
+	schema   = os.Getenv(mysql_users_schema)
 )
 
 func init() {
 	var err error
+
+	fmt.Printf("%s:%s@tcp(%s)/%s?charset=utf8", username, password, host, schema)
 	datasourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8",
 		username, password, host, schema)
 
