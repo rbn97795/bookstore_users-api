@@ -26,9 +26,5 @@ jobs:
           registry: asia.gcr.io
           project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
           image_name: bookstore_users-api
-      env:
-          MYSQL_USERS_USERNAME: ${{ secrets.MYSQL_USERS_USERNAME }}
-          MYSQL_USERS_PASSWORD: ${{ secrets.MYSQL_USERS_PASSWORD }}
-          MYSQL_USERS_HOST: ${{ secrets.MYSQL_USERS_HOST }}
-          MYSQL_USERS_SCHEMA: ${{ secrets.MYSQL_USERS_SCHEMA }}
-      
+          build_args: MYSQL_USERS_USERNAME=${{ secrets.MYSQL_USERS_USERNAME }},MYSQL_USERS_PASSWORD=${{ secrets.MYSQL_USERS_PASSWORD }},MYSQL_USERS_HOST=${{ secrets.MYSQL_USERS_HOST }}, MYSQL_USERS_SCHEMA=${{ secrets.MYSQL_USERS_SCHEMA }}
+  
