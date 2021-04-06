@@ -19,13 +19,21 @@ jobs:
     - name: Test
       run: go test -v ./...
     
-    - name: push docker GCR
-      uses: RaccoonDev/push-docker-gcr@v1
+    - name: Docker Bulid
+      uses: benjlevesque/actions-docker-gcr/build@v1.1
       with:
-        gcr_host:  asia.gcr.io
-        image_name: bookstore_users-api
-        image_tag: latest
-        env:
-          GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY }}
-          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+        image: ${{ secrets.GOOGLE_PROJECT_ID }}/bookstore_users-api
+        registry: asia.gcr.io
+      env: 
+          MYSQL_USERS_USERNAME: ${{ secrets.MYSQL_USERS_USERNAME }}
+          MYSQL_USERS_PASSWORD: ${{ secrets.MYSQL_USERS_PASSWORD }}
+          MYSQL_USERS_HOST: ${{ secrets.MYSQL_USERS_HOST }}
+          MYSQL_USERS_SCHEMA: ${{ secrets.MYSQL_USERS_SCHEMA }}
+
+    - name: Docker Push
+      uses: benjlevesque/actions-docker-gcr/push@v1.1
+      with:
+          image: ${{ secrets.GOOGLE_PROJECT_ID }}/bookstore_users-api
+          registry: asia.gcr.io
+          gcloud_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
       
