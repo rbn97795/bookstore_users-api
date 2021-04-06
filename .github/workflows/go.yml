@@ -1,0 +1,39 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.15
+
+    - name: Test
+      run: go test -v ./...
+    
+    - name: Docker Bulid
+      uses: benjlevesque/actions-docker-gcr/build@v1.1
+      with:
+        image: ${{ secrets.GOOGLE_PROJECT_ID }}/bookstore_users-api
+        registry: asia.gcr.io
+      env: 
+          MYSQL_USERS_USERNAME: ${{ secrets.MYSQL_USERS_USERNAME }}
+          MYSQL_USERS_PASSWORD: ${{ secrets.MYSQL_USERS_PASSWORD }}
+          MYSQL_USERS_HOST: ${{ secrets.MYSQL_USERS_HOST }}
+          MYSQL_USERS_SCHEMA: ${{ secrets.MYSQL_USERS_SCHEMA }}
+
+    - name: Docker Push
+      uses: benjlevesque/actions-docker-gcr/push@v1.1
+      with:
+          image: ${{ secrets.GOOGLE_PROJECT_ID }}/bookstore_users-api
+          registry: asia.gcr.io
+          gcloud_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+      
