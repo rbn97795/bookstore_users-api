@@ -16,8 +16,16 @@ jobs:
       with:
         go-version: 1.15
 
-    - name: Build
-      run: go build -v ./...
-
     - name: Test
       run: go test -v ./...
+    
+    - name: push docker GCR
+      uses: RaccoonDev/push-docker-gcr@v1
+      with:
+        gcr_host:  asia.gcr.io
+        image_name: bookstore_users-api
+        image_tag: latest
+        env:
+          GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY }}
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+      
